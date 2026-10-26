@@ -2,8 +2,14 @@
 // - /api y /api/* se reenvían al Google Apps Script (variable GOOGLE_APPS_SCRIPT_URL).
 // - Todo lo demás lo sirven los archivos estáticos del sitio (binding ASSETS).
 
+// URL pública del Apps Script (termina en /exec). No es un secreto: las acciones privadas
+// exigen token de Firebase y rol autorizado. Si en Cloudflare se carga la variable
+// GOOGLE_APPS_SCRIPT_URL, esa tiene prioridad sobre este valor de respaldo.
+const DEFAULT_APPS_SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbytHLZ3bvYtaeX-RKgQvmx1PZHFse0z08XsggKByD651SrHKRc0uiUGMulyJOuxgs5e/exec';
+
 async function handleApi(request, env) {
-  const endpoint = env.GOOGLE_APPS_SCRIPT_URL;
+  const endpoint = env.GOOGLE_APPS_SCRIPT_URL || DEFAULT_APPS_SCRIPT_URL;
   const headers = {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store'
