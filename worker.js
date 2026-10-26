@@ -10,8 +10,14 @@ async function handleApi(request, env) {
   };
 
   if (!endpoint) {
+    // Solo nombres (nunca valores) para detectar errores de tipeo en el nombre de la variable.
+    const nombres = Object.keys(env).filter(k => k !== 'ASSETS');
     return new Response(
-      JSON.stringify({ ok: false, error: 'Falta configurar GOOGLE_APPS_SCRIPT_URL en Cloudflare (Settings → Variables and Secrets).' }),
+      JSON.stringify({
+        ok: false,
+        error: 'Falta configurar GOOGLE_APPS_SCRIPT_URL en Cloudflare (Settings → Variables and Secrets).',
+        variablesDetectadas: nombres
+      }),
       { status: 200, headers }
     );
   }
