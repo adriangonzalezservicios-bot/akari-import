@@ -1,0 +1,1032 @@
+[
+  {
+    "sku": "PIOTT002",
+    "name": "Plotter de Corte Gadnic 88 Cm",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 225000,
+    "wholesale": 200000,
+    "active": true
+  },
+  {
+    "sku": "SOP00060",
+    "name": "Soporte De Pie Para TV Gadnic Ruedas Estante 32 a 65 Pulgadas 50 kg",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 150000,
+    "wholesale": 130000,
+    "active": true
+  },
+  {
+    "sku": "ESCRI1N",
+    "name": "Escritorio Gadnic Con Altura Regulable Eléctrico",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 240000,
+    "wholesale": 210000,
+    "active": true
+  },
+  {
+    "sku": "TRAMPIT8",
+    "name": "Cama Elástica Gadnic 244 cm 8 ft Trampolín Con Red De Protección Ext",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 120000,
+    "wholesale": 100000,
+    "active": true
+  },
+  {
+    "sku": "BEBE0082",
+    "name": "Sacalece Eléctrico Mave By Gadnic Portátil 9 Niveles 3 Modos Batería",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 65000,
+    "wholesale": 55000,
+    "active": true
+  },
+  {
+    "sku": "PICA0010",
+    "name": "Picadora de Carne Eléctrica Cuk By Gadnic 600-1800W",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 75000,
+    "wholesale": 65000,
+    "active": true
+  },
+  {
+    "sku": "GRASS004",
+    "name": "Recolector de Hojas Gadnic Ajustable y Ultraligero",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 80000,
+    "wholesale": 65000,
+    "active": true
+  },
+  {
+    "sku": "ESCRI015",
+    "name": "Escritorio Gamer En L Gadnic MFC Textura Carbono Estructura Acero",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 100000,
+    "wholesale": 85000,
+    "active": true
+  },
+  {
+    "sku": "ASP00056",
+    "name": "Aspiradora Ciclónica Gadnic 2000W Filtro Lavable Rebobinado Automát",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 100000,
+    "wholesale": 85000,
+    "active": true
+  },
+  {
+    "sku": "SECA0002",
+    "name": "Secador De Pelo Gadnic Care 2200 / 2050W Tecnología Cerámica Ionic",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 20000,
+    "wholesale": 16000,
+    "active": true
+  },
+  {
+    "sku": "CAMP0147",
+    "name": "Colchón Inflable SouthPort By Gadnic 2 Plazas con Bomba Eléctrica y A",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 50000,
+    "wholesale": 40000,
+    "active": true
+  },
+  {
+    "sku": "PASTA001",
+    "name": "Fábrica de Pastas Gadnic Pastamática Acero Inoxidable 7 Regulaciones",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 56000,
+    "wholesale": 40000,
+    "active": true
+  },
+  {
+    "sku": "MANI0047",
+    "name": "Lijadora Eléctrica Bron By Gadnic 200W 12000 RPM",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 45000,
+    "wholesale": 40000,
+    "active": true
+  },
+  {
+    "sku": "DESELE61",
+    "name": "Mini Aerógrafo Gadnic Compresor Multipropósito Pulverizador Pintura",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 45000,
+    "wholesale": 35000,
+    "active": true
+  },
+  {
+    "sku": "SECA0014",
+    "name": "Cepillo Secador Care By Gadnic Con 5 Cabezales Intercambiables Ondas",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 85000,
+    "wholesale": 70000,
+    "active": true
+  },
+  {
+    "sku": "YOGUR002",
+    "name": "Yogurtera Cuk Gadnic Fabricación de Yogurt 7 Vasos 200ml",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 55000,
+    "wholesale": 45000,
+    "active": true
+  },
+  {
+    "sku": "BAJU0014",
+    "name": "Bajo Trastero Para Moto Vetra By Gadnic 45L Plástico Inoxidable con",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 110000,
+    "wholesale": 95000,
+    "active": true
+  },
+  {
+    "sku": "WATPU001",
+    "name": "Bomba Presurizadora Bron By Gadnic presión Automática Sensor Pre Fil",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 80000,
+    "wholesale": 60000,
+    "active": true
+  },
+  {
+    "sku": "LANPA001",
+    "name": "Mapa Gadnic Clear Dream con Base Escribir Centrífugo Integral Lumi",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 70000,
+    "wholesale": 50000,
+    "active": true
+  },
+  {
+    "sku": "REL00320",
+    "name": "SmartWatch Gadnic Watch 8 Mini Presión Arterial NFC IP68 GPS Llama",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 28000,
+    "wholesale": 23000,
+    "active": true
+  },
+  {
+    "sku": "PAINTG01",
+    "name": "Pistola de Pintura Gadnic PG1000 400w Regulable",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 65000,
+    "wholesale": 60000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0028",
+    "name": "Difusor Humidificador Gadnic DH200 De Llama",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 18000,
+    "wholesale": 15000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0001",
+    "name": "Difusor Gadnic Humidificador Ultrasónico 300ml 20hs 7 Colores",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 23000,
+    "wholesale": 16000,
+    "active": true
+  },
+  {
+    "sku": "WATER013",
+    "name": "Irrigador Bucal Care By Gadnic WM3 Telescópico Recargable 7 Velocidades",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 49000,
+    "wholesale": 40000,
+    "active": true
+  },
+  {
+    "sku": "DESKL009",
+    "name": "Lámpara de Plasma Eléctrica Gadnic Bola de Luz con Rayos",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 14000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "BEBE098G",
+    "name": "BEBE098G",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 30000,
+    "wholesale": 25000,
+    "active": true
+  },
+  {
+    "sku": "BEBE098B",
+    "name": "BEBE098B",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 30000,
+    "wholesale": 25000,
+    "active": true
+  },
+  {
+    "sku": "FC256001",
+    "name": "Irrigador Bucal Portátil Nicefeel FC256 200 ml IPX7 Batería 1400 mAh",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 36000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "AV000009",
+    "name": "Compresor De Aire Gadnic Para Auto 12V 150 PSI 85 Lts/Min Portátil",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 35000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "ALCAR006",
+    "name": "Sistema De Alarma Gadnic Para Autos Control Remoto",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 43000,
+    "wholesale": 38000,
+    "active": true
+  },
+  {
+    "sku": "QPELU002",
+    "name": "Saca Pelusa Recargable Gadnic",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 26000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "ALMTER06",
+    "name": "Manta Térmica Gadnic Eléctrica",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 50000,
+    "wholesale": 45000,
+    "active": true
+  },
+  {
+    "sku": "GAZEB003",
+    "name": "Gazebo Gadnic 3x3 Plegable Impermeable Uso Temporal Toldo Con Paredes",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 90000,
+    "wholesale": 85000,
+    "active": true
+  },
+  {
+    "sku": "REL00311",
+    "name": "Smartwatch Gadnic V35 Pro Pantalla Amoled",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 28000,
+    "wholesale": 23000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0019",
+    "name": "Difusor Aromático Gadnic Humidificador Ultrasónico Con Luz LED 7 Colores",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 23000,
+    "wholesale": 18000,
+    "active": true
+  },
+  {
+    "sku": "EREL0002",
+    "name": "Estuche Organizador de 12 Relojes Con Bisagra de Metal",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 30000,
+    "wholesale": 25000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0040",
+    "name": "Difusor Aromático Gadnic Efecto Madera",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 12000,
+    "active": true
+  },
+  {
+    "sku": "ANTIPA03",
+    "name": "Antiparra SouthPort Gadnic A3GO Para Ski Snowboard",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 28000,
+    "wholesale": 25000,
+    "active": true
+  },
+  {
+    "sku": "GAZEB001",
+    "name": "Gazebo Plegable Gadnic 3x3 Reforzado Con Paredes Uso Temporal",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 90000,
+    "wholesale": 85000,
+    "active": true
+  },
+  {
+    "sku": "AV000414",
+    "name": "Compresor De Aire Portátil Gadnic Para Neumáticos 12V",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 23000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "MANI0006",
+    "name": "Extractor De Polvo De Uñas Care By Gadnic VaccPro 40w Ergonómico",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 25000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "TOSTAD2N",
+    "name": "TOSTAD2N",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 21000,
+    "wholesale": 19000,
+    "active": true
+  },
+  {
+    "sku": "RELMO015",
+    "name": "Reloj De Mujer Gadnic Cuarzo Analógico Resistente Al Agua Elegante",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 20000,
+    "wholesale": 15000,
+    "active": true
+  },
+  {
+    "sku": "MATELI01",
+    "name": "Mate Autocebante South Port By Gadnic Termo 500 ml Acero Inoxidable",
+    "description": "Origen: Gadnic. Observación: falta stock",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 10000,
+    "wholesale": 8000,
+    "active": true
+  },
+  {
+    "sku": "ARROZ001",
+    "name": "Olla Arrocera Gadnic RM1000 Vaporera Antiadherente 700w",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 67000,
+    "wholesale": 57000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0002",
+    "name": "Difusor Aromaterapia Ultrasónico Gadnic Bamboo 300ml 7 Luces LED",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "DEPI0019",
+    "name": "Depiladora eléctrica 4 en 1 Gadnic para mujer pierna cara inalámbrica",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 25000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0018",
+    "name": "Difusor Humidificador Gadnic DH100 Efecto Llama 180ml Aromaterapia",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "WAFLES03",
+    "name": "Máquina De Mini Donas CUK By GADNIC Mini Antiadherente 750W",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 35000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "BEBE0093",
+    "name": "Sonajero Móvil Giratorio Gadnic Musical con Proyector Luz",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 20000,
+    "wholesale": 15000,
+    "active": true
+  },
+  {
+    "sku": "BC000066",
+    "name": "Cargador Portátil Gadnic Batería 25000 mAh Carga Rápida 5V 2A Dual",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 28000,
+    "wholesale": 25000,
+    "active": true
+  },
+  {
+    "sku": "TIJERAS5",
+    "name": "Tijera Profesional Gadnic Peluquería Canina Microdentada 7\"",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 14000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0012",
+    "name": "Humidificador Ultra Silencioso Gadnic Aromaterapia",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 10000,
+    "wholesale": 7000,
+    "active": true
+  },
+  {
+    "sku": "MANI0022",
+    "name": "Cabina Para Uñas Care By Gadnic FUTURE V11 UV LED 18.8W Display",
+    "description": "Origen: Gadnic. Observación: roto",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 26000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0014",
+    "name": "Humidificador Difusor Gadnic DF10 Ultrasónico USB Recargable",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 16000,
+    "wholesale": 13000,
+    "active": true
+  },
+  {
+    "sku": "SECA0003",
+    "name": "Cepillo Secador de Pelo Care By Gadnic S1200 Pro Voluminizador Calor",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 26000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "BEBE0014",
+    "name": "Kit x2 Sacalece Mave by Gadnic D-112 150ml Extractor Automático",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 26000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "CLEAN001",
+    "name": "Limpiador Facial Care By Gadnic BF3078 Removedor de Puntos Negros",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 22000,
+    "wholesale": 18000,
+    "active": true
+  },
+  {
+    "sku": "CORTPE38",
+    "name": "Cortadora de Pelo Gadnic Trimz Acero Inoxidable",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 22000,
+    "wholesale": 18000,
+    "active": true
+  },
+  {
+    "sku": "MASAJ308",
+    "name": "Masajeador Cervical y Lumbar Gadnic 8 Rodillos Bidireccionales",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 28000,
+    "wholesale": 22000,
+    "active": true
+  },
+  {
+    "sku": "RELMO003",
+    "name": "Reloj Digital Deportivo Gadnic Apolo Sumergible",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 16000,
+    "wholesale": 12000,
+    "active": true
+  },
+  {
+    "sku": "BEBE0013",
+    "name": "Sacalehes Gadnic RH-289 Portátil Automático Batería Recargable 1200",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 22000,
+    "wholesale": 18000,
+    "active": true
+  },
+  {
+    "sku": "AV000014",
+    "name": "Aspiradora de Mano 12v Para Auto Portátil 108w Filtro HEPA",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 25000,
+    "wholesale": 20000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0004",
+    "name": "Difusor Humidificador Aromatizante LED Multicolor 500ml Temporizado",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 13000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "EMBUTI03",
+    "name": "Máquina Rellenadora Decoradora Gadnic Galletas",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 38000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "ABLUE097",
+    "name": "Auricular In Ear Gadnic AQUA S11 TWS Bluetooth",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 12000,
+    "active": true
+  },
+  {
+    "sku": "BC000064",
+    "name": "Power Bank Jump Starter Gadnic 10000 mAh 12 V Arranque Rápido",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 32000,
+    "wholesale": 25000,
+    "active": true
+  },
+  {
+    "sku": "TRIPODE25",
+    "name": "Trípode Extensible Gadnic Con Control Remoto Bluetooth",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 32000,
+    "wholesale": 25000,
+    "active": true
+  },
+  {
+    "sku": "GRINDER7",
+    "name": "Molinillo De Café Manual Gadnic Portátil Ajustable En Acero Inoxidable",
+    "description": "Origen: Gadnic. Observación: ok / 2 roto",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 18000,
+    "wholesale": 15000,
+    "active": true
+  },
+  {
+    "sku": "BALAN15B",
+    "name": "BALAN15B",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "CAMWEB11",
+    "name": "Cámara Web Gadnic Full HD 1080p con Micrófono 30 FPS",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 22000,
+    "wholesale": 17000,
+    "active": true
+  },
+  {
+    "sku": "ANAFE111",
+    "name": "Anafe Eléctrico Cuk by Gadnic 1 Hornalla 1000W",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 19000,
+    "wholesale": 15000,
+    "active": true
+  },
+  {
+    "sku": "ABLUE163",
+    "name": "Auriculares Inalámbricos Gadnic Micrófono Vincha Bluetooth 5.3",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 12000,
+    "active": true
+  },
+  {
+    "sku": "MOUSE030",
+    "name": "Mouse Inalámbrico Óptico LED Recargable Silencioso Bluetooth Portátil",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 10000,
+    "wholesale": 8000,
+    "active": true
+  },
+  {
+    "sku": "DIFU0009",
+    "name": "Difusor Gadnic Humidificador Aromatizante para Aceites 130mL Bamboo",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 10000,
+    "wholesale": 8000,
+    "active": true
+  },
+  {
+    "sku": "SIER0004",
+    "name": "Kit de Adaptación Para Sierras Gadnic Soporte de Motosierra",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 12000,
+    "active": true
+  },
+  {
+    "sku": "TRIPODE16",
+    "name": "Trípode Gadnic 2,1 mts para Iluminadores",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 9000,
+    "wholesale": 7000,
+    "active": true
+  },
+  {
+    "sku": "BURBU002",
+    "name": "Pistola De Burbujas Gadnic Burbujero Automático Con Luces",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 13000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "ABLUE117",
+    "name": "Auriculares Inalámbricos Gadnic In-ear SH8 Bluetooth Running Deporte",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 14000,
+    "wholesale": 10000,
+    "active": true
+  },
+  {
+    "sku": "MOLIN030",
+    "name": "Set x1 Molinillo Pimentero Cuk By Gadnic Moledor Manual",
+    "description": "Origen: Gadnic. Observación: ok",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 6000,
+    "wholesale": 5000,
+    "active": true
+  },
+  {
+    "sku": "BALANZ2A",
+    "name": "BALANZ2A",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 10000,
+    "wholesale": 8000,
+    "active": true
+  },
+  {
+    "sku": "SECA0007",
+    "name": "Cepillo Secador y Moldeador de Pelo Gadnic Monner Desmontable",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 20000,
+    "wholesale": 15000,
+    "active": true
+  },
+  {
+    "sku": "ASPNAS03",
+    "name": "Aspirador Nasal Gadnic Eléctrico Automático Silencioso 6 Niveles",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 37000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "SOP00075",
+    "name": "Soporte para Enchufe Tomacorriente Gadnic de Pared",
+    "description": "Origen: Gadnic",
+    "category": "Gadnic",
+    "image": "assets/placeholder.svg",
+    "retail": 10000,
+    "wholesale": 8000,
+    "active": true
+  },
+  {
+    "sku": "ORYX-EARTH",
+    "name": "Parlante Oryx EARTH (SP1146-50)",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 45000,
+    "wholesale": 40000,
+    "active": true
+  },
+  {
+    "sku": "SV2404",
+    "name": "Parlante SV2404",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 35000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "SP31-18",
+    "name": "Ventilador Startrack SP31-18",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 35000,
+    "wholesale": 27000,
+    "active": true
+  },
+  {
+    "sku": "ML1003T",
+    "name": "Termo + mate Morlan ML1003T",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 20000,
+    "wholesale": 18000,
+    "active": true
+  },
+  {
+    "sku": "ALON",
+    "name": "Termo + mate Alon",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 20000,
+    "wholesale": 18000,
+    "active": true
+  },
+  {
+    "sku": "YQ10119",
+    "name": "Termo + mate Hengda YQ10119",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 20000,
+    "wholesale": 18000,
+    "active": true
+  },
+  {
+    "sku": "BOTTLE750",
+    "name": "Sport Bottle 750 ml",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 9000,
+    "wholesale": 8500,
+    "active": true
+  },
+  {
+    "sku": "BOTTLE500",
+    "name": "Sport Bottle 500 ml",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 8000,
+    "wholesale": 7500,
+    "active": true
+  },
+  {
+    "sku": "MATE-ROJO",
+    "name": "Set mate lata barril rojo",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 6000,
+    "wholesale": 5000,
+    "active": true
+  },
+  {
+    "sku": "MATE-BLANCO",
+    "name": "Set mate lata barril blanco",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 6000,
+    "wholesale": 5000,
+    "active": true
+  },
+  {
+    "sku": "MATE-NEGRO",
+    "name": "Set mate lata negro",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 6000,
+    "wholesale": 5000,
+    "active": true
+  },
+  {
+    "sku": "CARTEL",
+    "name": "Cartel Luminoso",
+    "description": "Origen: Gastón Muñoz. Observación: Venezuela 1412",
+    "category": "Gastón Muñoz",
+    "image": "assets/placeholder.svg",
+    "retail": 15000,
+    "wholesale": 13000,
+    "active": true
+  },
+  {
+    "sku": "SIN-SKU-001",
+    "name": "Bandolera / Bolso Animal Print",
+    "description": "Origen: Pedido",
+    "category": "Pedido",
+    "image": "assets/placeholder.svg",
+    "retail": 65000,
+    "wholesale": 50000,
+    "active": true
+  },
+  {
+    "sku": "SIN-SKU-002",
+    "name": "Crocs Classic Mystic Purple Talle 37",
+    "description": "Origen: Pedido",
+    "category": "Pedido",
+    "image": "assets/placeholder.svg",
+    "retail": 42000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "SIN-SKU-003",
+    "name": "Crocs Little Juice Talle 2/3",
+    "description": "Origen: Pedido",
+    "category": "Pedido",
+    "image": "assets/placeholder.svg",
+    "retail": 37000,
+    "wholesale": 27000,
+    "active": true
+  },
+  {
+    "sku": "SIN-SKU-004",
+    "name": "Top deportivo Fila Racer Talle M",
+    "description": "Origen: Pedido",
+    "category": "Pedido",
+    "image": "assets/placeholder.svg",
+    "retail": 45000,
+    "wholesale": 30000,
+    "active": true
+  },
+  {
+    "sku": "SIN-SKU-005",
+    "name": "Zapatilla Topper Wind IV Mesh Kids Talle 32",
+    "description": "Origen: Pedido",
+    "category": "Pedido",
+    "image": "assets/placeholder.svg",
+    "retail": 50000,
+    "wholesale": 35000,
+    "active": true
+  },
+  {
+    "sku": "SIN-SKU-006",
+    "name": "Zapatillas Adidas Adnice London Talle 26",
+    "description": "Origen: Pedido",
+    "category": "Pedido",
+    "image": "assets/placeholder.svg",
+    "retail": 45000,
+    "wholesale": 35000,
+    "active": true
+  },
+  {
+    "sku": "SIN-SKU-007",
+    "name": "Zapatillas Topper Core Azul talle 35",
+    "description": "Origen: Pedido",
+    "category": "Pedido",
+    "image": "assets/placeholder.svg",
+    "retail": 50000,
+    "wholesale": 40000,
+    "active": true
+  }
+]
