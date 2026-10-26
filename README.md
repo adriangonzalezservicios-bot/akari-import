@@ -46,5 +46,15 @@ Se incluye `importar-productos.json` con los 103 productos de la planilla “Lis
 - El historial registra modificaciones y pedidos. Google Sheets permite además usar Historial de versiones como respaldo.
 - La URL de Apps Script es un endpoint público, pero las acciones privadas requieren token Firebase y rol autorizado.
 
+## Diagnóstico rápido
+- Abrí `URL_DE_APPS_SCRIPT/exec?action=health`: indica si están cargadas `FIREBASE_WEB_API_KEY` y `ADMIN_EMAILS`, si existen las 5 pestañas y cuántos productos hay (no muestra claves ni correos).
+- Si el sitio dice "No se pudo cargar el catálogo", el texto entre paréntesis indica la causa: falta `GOOGLE_APPS_SCRIPT_URL` en Cloudflare (Production, y hay que volver a desplegar), la URL `/exec` está mal copiada, o la implementación de Apps Script no tiene acceso "Cualquier persona".
+- Si entrás pero no llegás al panel, el cartel "No se pudo verificar tu cuenta" muestra el motivo; lo más común es que el correo de `ADMIN_EMAILS` no coincida exactamente con el usuario de Firebase.
+- El catálogo queda vacío hasta importar `importar-productos.json` desde el panel (admin.html).
+- Los logos deben estar en `assets/` (no en la raíz).
+
+## Privacidad de precios mayoristas
+`importar-productos.json` contiene precios mayoristas y todo archivo de la raíz se publica en el sitio. Después de importar los productos, borralo del repositorio (o guardalo fuera de él) y mantené el repositorio privado. No subas la planilla Excel de origen.
+
 ## Límites
 No puedo crear la hoja de Google ni desplegar Cloudflare/Firebase en tu cuenta desde este archivo; esas conexiones requieren que inicies sesión en tus cuentas y aceptes permisos. Una vez completados los pasos, el código persiste datos en Sheets y no en el navegador.
