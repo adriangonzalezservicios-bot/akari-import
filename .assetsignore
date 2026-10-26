@@ -1,0 +1,10 @@
+.assetsignore
+.gitignore
+wrangler.jsonc
+worker.js
+README.md
+functions
+importar-productos.json
+node_modules
+.git
+.wrangler

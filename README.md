@@ -46,6 +46,12 @@ Se incluye `importar-productos.json` con los 103 productos de la planilla “Lis
 - El historial registra modificaciones y pedidos. Google Sheets permite además usar Historial de versiones como respaldo.
 - La URL de Apps Script es un endpoint público, pero las acciones privadas requieren token Firebase y rol autorizado.
 
+## Despliegue en Cloudflare (Worker con archivos estáticos)
+Este sitio se despliega como **Worker** (`wrangler.jsonc` + `worker.js`). `worker.js` atiende `/api` y reenvía al Google Apps Script; el resto lo sirven los archivos estáticos. La carpeta `functions/` de Cloudflare Pages no se usa en Workers.
+- Deploy command en Cloudflare (Settings → Builds): `npx wrangler deploy`.
+- Variable obligatoria: `GOOGLE_APPS_SCRIPT_URL` (Settings → Variables and Secrets del Worker), con la URL de Apps Script que termina en `/exec`.
+- `.assetsignore` evita que se publiquen `importar-productos.json`, `README.md`, `worker.js` y `wrangler.jsonc`.
+
 ## Diagnóstico rápido
 - Abrí `URL_DE_APPS_SCRIPT/exec?action=health`: indica si están cargadas `FIREBASE_WEB_API_KEY` y `ADMIN_EMAILS`, si existen las 5 pestañas y cuántos productos hay (no muestra claves ni correos).
 - Si el sitio dice "No se pudo cargar el catálogo", el texto entre paréntesis indica la causa: falta `GOOGLE_APPS_SCRIPT_URL` en Cloudflare (Production, y hay que volver a desplegar), la URL `/exec` está mal copiada, o la implementación de Apps Script no tiene acceso "Cualquier persona".
