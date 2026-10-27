@@ -83,6 +83,27 @@ progress{width:100%;height:10px}
       <div class="wide"><button class="primary">Guardar producto</button> <button type="button" class="action" id="clearForm">Limpiar</button></div>
     </form>
 
+    <!-- Excel de productos -->
+    <div class="box" id="excelBox">
+      <h3>Excel de productos</h3>
+      <p class="muted small">Descargá los productos en un Excel, editá lo que necesites (SKU, nombre, detalle, categoría, imagen, precios, publicado en tienda Sí/No) y volvé a subirlo para actualizar. Para agregar productos nuevos, escribí filas nuevas dejando el ID vacío. Antes de aplicar, vas a ver una vista previa de los cambios.</p>
+      <div class="toolbar">
+        <label>Qué descargar
+          <select id="excelScope">
+            <option value="todos">Todos los productos</option>
+            <option value="filtrados">Los que se ven (filtros)</option>
+            <option value="seleccionados">Solo los seleccionados</option>
+          </select>
+        </label>
+        <div class="row-btn">
+          <button type="button" class="primary" id="excelDownload">Descargar Excel</button>
+          <button type="button" class="action" id="excelPick">Subir Excel editado…</button>
+          <input id="excelFile" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+        </div>
+      </div>
+      <div id="excelResult"></div>
+    </div>
+
     <!-- Fotos en bloque -->
     <div class="box" id="photosBox">
       <h3>Cargar fotos en bloque</h3>

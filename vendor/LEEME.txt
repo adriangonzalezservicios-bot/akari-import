@@ -1,0 +1,2 @@
+ExcelJS 4.4.0 (MIT) — https://github.com/exceljs/exceljs
+Usado en el panel de administración para descargar y leer archivos Excel (.xlsx).

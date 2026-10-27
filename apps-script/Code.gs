@@ -105,6 +105,7 @@ function handle_(action, b, token) {
     case 'resetResellerPassword': return resetResellerPassword_(b, ident);
     case 'bulkUpdateProducts': return withLock_(() => bulkUpdateProducts_(b, ident));
     case 'setProductImage': return setProductImage_(b, ident);
+    case 'upsertProducts': return withLock_(() => upsertProducts_(b, ident));
     case 'adminHistory': return { ok: true, history: rows_('history').reverse().slice(0, 500) };
     default: throw Error('Acción no reconocida.');
   }
@@ -118,7 +119,7 @@ function health_() {
   Object.keys(TABS).forEach(key => { sheets[key] = !!ss_().getSheetByName(TABS[key]); });
   return {
     ok: true,
-    version: 3,
+    version: 4,
     firebaseKeyConfigured: !!props.getProperty('FIREBASE_WEB_API_KEY'),
     adminEmailsConfigured: !!(props.getProperty('ADMIN_EMAILS') || '').trim(),
     sheets: sheets,
@@ -463,6 +464,122 @@ function bulkUpdateProducts_(b, u) {
   if (wholesalePct) resumen.push('mayorista ' + wholesalePct + '%');
   log_(u, 'Edición masiva', count + ' productos · ' + resumen.join(' · '));
   return { ok: true, count: count };
+}
+
+/* ---------- Actualización de productos desde Excel ---------- */
+
+function normSku_(s) { return String(s === undefined || s === null ? '' : s).trim().toUpperCase(); }
+
+function validImage_(s) { return !s || /^https:\/\//i.test(s) || s.indexOf('assets/') === 0; }
+
+function money2_(n) { return Math.round(n * 100) / 100; }
+
+// b.rows: [{ row?, id?, sku, name, description?, category?, image?, retail?, wholesale?, active? }]
+// - Se busca el producto por id; si no hay id (o no existe), por SKU; si tampoco, se crea uno nuevo.
+// - Un campo ausente (undefined) no se modifica. Permite cambiar el SKU de un producto existente.
+// - Todo o nada: si alguna fila es inválida o el resultado dejaría SKU repetidos, no se escribe nada.
+function upsertProducts_(b, u) {
+  const input = Array.isArray(b.rows) ? b.rows : null;
+  if (!input) throw Error('Lista de filas inválida.');
+  if (!input.length) throw Error('No hay filas para aplicar.');
+  if (input.length > 3000) throw Error('Demasiadas filas en una sola carga (máximo 3000).');
+
+  const all = rows_('products');
+  const byId = {}, bySku = {};
+  all.forEach(p => { byId[p.id] = p; bySku[normSku_(p.sku)] = p; });
+
+  const errors = [];
+  const touchedBy = {};  // id de producto existente -> etiqueta de la fila que lo modifica
+  const plan = [];       // { target: producto existente | null, data: campos a aplicar }
+
+  input.forEach((r, idx) => {
+    const label = 'Fila ' + (r && r.row ? r.row : idx + 1);
+    if (!r || typeof r !== 'object') { errors.push(label + ': datos inválidos.'); return; }
+    const data = {};
+    let bad = false;
+    const fail = msg => { errors.push(label + ': ' + msg); bad = true; };
+
+    data.sku = String(r.sku === undefined || r.sku === null ? '' : r.sku).trim();
+    if (!data.sku) fail('falta el SKU.');
+    data.name = String(r.name === undefined || r.name === null ? '' : r.name).trim();
+    if (!data.name) fail('falta el nombre.');
+
+    if (r.description !== undefined && r.description !== null) data.description = String(r.description);
+    if (r.category !== undefined && r.category !== null) data.category = String(r.category).trim() || 'General';
+    if (r.image !== undefined && r.image !== null) {
+      data.image = String(r.image).trim();
+      if (!validImage_(data.image)) fail('la imagen debe ser una URL que empiece con https://.');
+    }
+    ['retail', 'wholesale'].forEach(k => {
+      const v = r[k];
+      if (v === undefined || v === null || v === '') return;
+      const n = Number(v);
+      if (!isFinite(n) || n < 0) fail('el precio ' + (k === 'retail' ? 'minorista' : 'mayorista') + ' no es válido.');
+      else data[k] = money2_(n);
+    });
+    if (r.active !== undefined && r.active !== null) {
+      if (typeof r.active !== 'boolean') fail('el valor de "publicado" no es válido.');
+      else data.active = r.active;
+    }
+    if (bad) return;
+
+    const id = String(r.id === undefined || r.id === null ? '' : r.id).trim();
+    const target = (id && byId[id]) || bySku[normSku_(data.sku)] || null;
+    if (target) {
+      // Mismo SKU salvo mayúsculas/espacios: se conserva el original (no es un cambio real).
+      if (normSku_(data.sku) === normSku_(target.sku)) data.sku = target.sku;
+      if (touchedBy[target.id]) { errors.push(label + ': modifica el mismo producto que la ' + touchedBy[target.id].toLowerCase() + '.'); return; }
+      touchedBy[target.id] = label;
+    }
+    plan.push({ target: target, data: data, label: label });
+  });
+
+  // SKU únicos en el resultado final (permite intercambiar SKU entre dos productos).
+  const finalSku = {};
+  const newSku = {};
+  plan.forEach(it => { if (it.target) newSku[it.target.id] = it.data.sku; });
+  all.forEach(p => {
+    const sku = normSku_(newSku[p.id] !== undefined ? newSku[p.id] : p.sku);
+    (finalSku[sku] = finalSku[sku] || []).push(p.sku);
+  });
+  plan.filter(it => !it.target).forEach(it => {
+    const sku = normSku_(it.data.sku);
+    (finalSku[sku] = finalSku[sku] || []).push(it.data.sku + ' (' + it.label.toLowerCase() + ')');
+  });
+  Object.keys(finalSku).forEach(k => {
+    if (finalSku[k].length > 1) errors.push('SKU repetido "' + k + '": quedaría en más de un producto.');
+  });
+
+  if (errors.length) {
+    throw Error(errors.slice(0, 12).join('\n') + (errors.length > 12 ? '\n… y ' + (errors.length - 12) + ' errores más.' : ''));
+  }
+
+  let created = 0, updated = 0, unchanged = 0;
+  plan.forEach(it => {
+    if (it.target) {
+      let changed = false;
+      Object.keys(it.data).forEach(k => {
+        if (it.target[k] !== it.data[k]) { it.target[k] = it.data[k]; changed = true; }
+      });
+      if (changed) { it.target.updatedAt = new Date(); updated++; } else unchanged++;
+    } else {
+      all.push({
+        id: Utilities.getUuid(), sku: it.data.sku, name: it.data.name,
+        description: it.data.description !== undefined ? it.data.description : '',
+        category: it.data.category !== undefined ? it.data.category : 'General',
+        image: it.data.image !== undefined ? it.data.image : '',
+        retail: it.data.retail !== undefined ? it.data.retail : 0,
+        wholesale: it.data.wholesale !== undefined ? it.data.wholesale : 0,
+        active: it.data.active !== undefined ? it.data.active : true,
+        updatedAt: new Date()
+      });
+      created++;
+    }
+  });
+
+  if (created || updated) write_('products', all);
+  log_(u, 'Actualización desde Excel', created + ' nuevos · ' + updated + ' modificados · ' + unchanged + ' sin cambios');
+  return { ok: true, created: created, updated: updated, unchanged: unchanged };
 }
 
 /* ---------- Fotos de productos (se guardan en Google Drive) ---------- */

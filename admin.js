@@ -42,8 +42,23 @@ const norm = s => String(s ?? '').trim().toUpperCase();
 
 function setBusy(on) {
   busy = on;
-  ['#photosPick', '#photosUpload', '#photosClear', '#bulkApply', '#importBtn'].forEach(sel => { const el = $(sel); if (el) el.disabled = on; });
+  ['#photosPick', '#photosUpload', '#photosClear', '#bulkApply', '#importBtn', '#excelDownload', '#excelPick'].forEach(sel => { const el = $(sel); if (el) el.disabled = on; });
   if (!on) updatePhotoButtons();
+  syncExcelApply();
+}
+
+// El botón "Aplicar" del Excel solo se habilita si hay algo para aplicar y no hay errores pendientes
+// (salvo que se haya tildado "Omitir las filas con error").
+function excelApplyAllowed() {
+  if (busy || !excelPlan) return false;
+  const c = excelPlan.counts;
+  if (!(c.new + c.mod)) return false;
+  const skip = $('#excelSkip');
+  return c.error === 0 || !!(skip && skip.checked);
+}
+function syncExcelApply() {
+  const btn = $('#excelApply');
+  if (btn) btn.disabled = !excelApplyAllowed();
 }
 
 /* ------------------------------------------------------------------ productos: tabla y filtros */
@@ -320,6 +335,392 @@ $('#rowPhotoFile').addEventListener('change', async e => {
   try { status(`Subiendo foto de ${p.sku}…`); await uploadPhotoFor(p, file); renderProducts(); status(`Foto de ${p.sku} actualizada.`); }
   catch (err) { status('No se pudo subir la foto: ' + err.message); }
   finally { setBusy(false); rowPhotoTarget = null; }
+});
+
+/* ------------------------------------------------------------------ Excel: descargar y actualizar */
+
+// ID va al final: es interno y no se debe tocar. Un ID vacío = producto nuevo.
+const EXCEL_COLS = [
+  { key: 'sku', header: 'SKU', width: 16, aliases: ['sku', 'codigo', 'cod'] },
+  { key: 'name', header: 'Nombre', width: 42, aliases: ['nombre', 'producto', 'titulo'] },
+  { key: 'description', header: 'Descripción (detalle)', width: 48, aliases: ['descripcion', 'descripcion (detalle)', 'detalle'] },
+  { key: 'category', header: 'Categoría', width: 18, aliases: ['categoria', 'rubro'] },
+  { key: 'image', header: 'Imagen (URL https)', width: 44, aliases: ['imagen', 'imagen (url https)', 'imagen url', 'url imagen', 'foto', 'image'] },
+  { key: 'retail', header: 'Precio minorista', width: 17, aliases: ['precio minorista', 'minorista', 'precio', 'retail', 'precio publico'] },
+  { key: 'wholesale', header: 'Precio mayorista', width: 17, aliases: ['precio mayorista', 'mayorista', 'wholesale'] },
+  { key: 'active', header: 'Publicado en tienda', width: 20, aliases: ['publicado en tienda', 'publicado', 'activo', 'activo en tienda', 'visible', 'mostrar', 'estado', 'en tienda'] },
+  { key: 'id', header: 'ID (no modificar)', width: 38, aliases: ['id', 'id (no modificar)', 'id interno'] }
+];
+const FIELD_LABEL = { sku: 'SKU', name: 'Nombre', description: 'Descripción', category: 'Categoría', image: 'Imagen', retail: 'Precio minorista', wholesale: 'Precio mayorista', active: 'Publicado' };
+const DIFF_FIELDS = ['sku', 'name', 'description', 'category', 'image', 'retail', 'wholesale', 'active'];
+const MAX_EXCEL_ROWS = 3000;
+
+const YES_WORDS = ['si', 's', 'yes', 'y', 'true', 'verdadero', '1', 'mostrar', 'publicado', 'publicar', 'activo', 'visible', 'x'];
+const NO_WORDS = ['no', 'n', 'false', 'falso', '0', 'no mostrar', 'ocultar', 'oculto', 'no publicado', 'no publicar', 'inactivo', 'no visible', 'despublicado'];
+
+let excelLibPromise = null;
+let excelPlan = null;
+
+function loadExcelJS() {
+  if (window.ExcelJS) return Promise.resolve(window.ExcelJS);
+  if (!excelLibPromise) {
+    excelLibPromise = new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'vendor/exceljs.min.js';
+      s.onload = () => (window.ExcelJS ? resolve(window.ExcelJS) : reject(new Error('No se pudo iniciar el componente de Excel.')));
+      s.onerror = () => { excelLibPromise = null; reject(new Error('No se pudo cargar el componente de Excel (vendor/exceljs.min.js).')); };
+      document.head.appendChild(s);
+    });
+  }
+  return excelLibPromise;
+}
+
+const stripAccents = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '');
+const normHeader = s => stripAccents(s).toLowerCase().replace(/\s+/g, ' ').trim();
+const money2 = n => Math.round(n * 100) / 100;
+
+function plainValue(v, preferLink) {
+  if (v === null || v === undefined) return '';
+  if (v instanceof Date) return v.toISOString().slice(0, 10);
+  if (typeof v === 'object') {
+    if (Array.isArray(v.richText)) return v.richText.map(t => t.text).join('');
+    if (v.hyperlink && (preferLink || !v.text)) return String(v.hyperlink);
+    if ('text' in v) return plainValue(v.text, false);
+    if ('result' in v) return plainValue(v.result, preferLink);
+    return '';
+  }
+  return v;
+}
+
+// Acepta 1234, "1.234", "1.234,50", "1,234.50", "$ 1.234", etc. Devuelve NaN si no es un número.
+function parseMoney(v) {
+  if (typeof v === 'number') return v;
+  let s = String(v).replace(/[^\d.,\-]/g, '');
+  if (!/\d/.test(s)) return NaN;
+  const c = s.lastIndexOf(','), d = s.lastIndexOf('.');
+  if (c > -1 && d > -1) s = c > d ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '');
+  else if (c > -1) s = /^-?\d{1,3}(,\d{3})+$/.test(s) ? s.replace(/,/g, '') : s.replace(',', '.');
+  else if (d > -1 && /^-?\d{1,3}(\.\d{3})+$/.test(s)) s = s.replace(/\./g, '');
+  const n = Number(s);
+  return isFinite(n) ? n : NaN;
+}
+
+// true / false / null (no reconocido)
+function parseActive(v) {
+  if (typeof v === 'boolean') return v;
+  const s = stripAccents(String(v)).toLowerCase().replace(/\s+/g, ' ').trim();
+  if (YES_WORDS.includes(s)) return true;
+  if (NO_WORDS.includes(s)) return false;
+  return null;
+}
+
+// Convierte enlaces de "compartir" de Google Drive en una URL que se puede mostrar como imagen.
+function normalizeImage(s) {
+  const m = /drive\.google\.com\/file\/d\/([\w-]+)/.exec(s) || /drive\.google\.com\/(?:open|uc)\?(?:[^#]*&)?id=([\w-]+)/.exec(s);
+  return m ? `https://drive.google.com/thumbnail?id=${m[1]}&sz=w1000` : s;
+}
+
+const moneyExact = n => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', minimumFractionDigits: 0, maximumFractionDigits: 2 }).format(Number(n) || 0);
+
+function fmtVal(k, v) {
+  if (k === 'retail' || k === 'wholesale') return moneyExact(v);
+  if (k === 'active') return v ? 'Sí' : 'No';
+  const s = String(v ?? '');
+  if (!s) return '(vacío)';
+  return s.length > 45 ? s.slice(0, 44) + '…' : s;
+}
+
+/* ---------- descargar ---------- */
+
+async function downloadExcel() {
+  const scope = $('#excelScope').value;
+  const list = scope === 'filtrados' ? filteredProducts() : scope === 'seleccionados' ? products.filter(p => selected.has(p.id)) : products;
+  if (!list.length) { status(scope === 'seleccionados' ? 'No hay productos seleccionados.' : 'No hay productos para descargar.'); return; }
+  status('Preparando el Excel…');
+  const ExcelJS = await loadExcelJS();
+  const wb = new ExcelJS.Workbook();
+  wb.creator = 'Akari Import';
+  wb.created = new Date();
+
+  const ws = wb.addWorksheet('Productos', { views: [{ state: 'frozen', xSplit: 2, ySplit: 1 }] });
+  ws.columns = EXCEL_COLS.map(c => ({ header: c.header, key: c.key, width: c.width }));
+  list.forEach(p => ws.addRow({
+    sku: String(p.sku), name: p.name || '', description: p.description || '', category: p.category || 'General',
+    image: p.image || '', retail: Number(p.retail) || 0, wholesale: Number(p.wholesale) || 0,
+    active: p.active !== false ? 'Sí' : 'No', id: String(p.id)
+  }));
+
+  const idx = key => EXCEL_COLS.findIndex(c => c.key === key) + 1;
+  const letter = key => ws.getColumn(idx(key)).letter;
+  const header = ws.getRow(1);
+  header.height = 22;
+  header.eachCell(cell => {
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2F5D46' } };
+    cell.alignment = { vertical: 'middle', wrapText: true };
+  });
+  ws.getColumn(idx('sku')).numFmt = '@';
+  ws.getColumn(idx('id')).numFmt = '@';
+  ws.getColumn(idx('id')).font = { color: { argb: 'FF999999' } };
+  ws.getColumn(idx('retail')).numFmt = '#,##0.00';
+  ws.getColumn(idx('wholesale')).numFmt = '#,##0.00';
+  header.getCell(idx('id')).font = { bold: true, color: { argb: 'FFDDDDDD' } };
+  // Desplegable Sí/No también en filas vacías al final, para productos nuevos.
+  const lastRow = list.length + 1 + 300;
+  for (let r = 2; r <= lastRow; r++) {
+    ws.getCell(`${letter('active')}${r}`).dataValidation = {
+      type: 'list', allowBlank: true, formulae: ['"Sí,No"'], showErrorMessage: true,
+      errorTitle: 'Publicado en tienda', error: 'Elegí Sí o No.'
+    };
+  }
+  ws.autoFilter = { from: { row: 1, column: 1 }, to: { row: 1, column: EXCEL_COLS.length } };
+
+  const help = wb.addWorksheet('Instrucciones');
+  help.getColumn(1).width = 110;
+  [
+    'CÓMO ACTUALIZAR LOS PRODUCTOS CON ESTE EXCEL',
+    '',
+    '1. Editá la hoja "Productos" y guardá el archivo como .xlsx.',
+    '2. En el panel de administración, tocá "Subir Excel editado…". Vas a ver una vista previa de los cambios antes de aplicarlos.',
+    '',
+    'COLUMNAS',
+    '• SKU: código del producto. Se puede cambiar: modificá la celda sin tocar el ID.',
+    '• Nombre: obligatorio.',
+    '• Descripción (detalle): texto libre.',
+    '• Categoría: si queda vacía se usa "General".',
+    '• Imagen (URL https): dirección de la foto. Los enlaces de "compartir" de Google Drive se convierten solos (el archivo debe estar compartido como "Cualquier persona con el enlace"). Vacía = sin foto.',
+    '• Precio minorista / Precio mayorista: números. Una celda de precio vacía NO modifica el precio (en un producto nuevo queda en 0).',
+    '• Publicado en tienda: Sí o No. También se entiende: Mostrar, No mostrar, Visible, Oculto, Activo, Inactivo, 1, 0.',
+    '• ID (no modificar): identifica al producto. Dejalo vacío para crear un producto nuevo.',
+    '',
+    'IMPORTANTE',
+    '• Los productos que borres de este Excel NO se eliminan de la tienda. Para ocultar uno, poné "No" en Publicado en tienda.',
+    '• No repitas un SKU: el sistema avisa y no aplica nada hasta que lo corrijas.',
+    '• Si no querés modificar una columna, podés borrarla del Excel completa (excepto SKU).',
+    '• Las fotos se pueden subir también con "Cargar fotos en bloque" en el panel.'
+  ].forEach((t, i) => { const c = help.getCell(`A${i + 1}`); c.value = t; c.alignment = { wrapText: true, vertical: 'top' }; if (i === 0 || t === 'COLUMNAS' || t === 'IMPORTANTE') c.font = { bold: true }; });
+
+  const buffer = await wb.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `akari-productos-${new Date().toLocaleDateString('sv-SE')}.xlsx`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+  status(`Excel descargado: ${list.length} productos. Editalo y subilo con "Subir Excel editado…".`);
+}
+
+/* ---------- leer y comparar ---------- */
+
+async function parseExcelFile(file) {
+  const ExcelJS = await loadExcelJS();
+  const wb = new ExcelJS.Workbook();
+  try { await wb.xlsx.load(await file.arrayBuffer()); }
+  catch { throw new Error('No se pudo leer el archivo. Tiene que ser un Excel .xlsx (no .xls ni .csv).'); }
+  const ws = wb.getWorksheet('Productos') || wb.worksheets[0];
+  if (!ws) throw new Error('El Excel no tiene hojas.');
+
+  const colKey = {};
+  const ignored = [];
+  ws.getRow(1).eachCell({ includeEmpty: false }, (cell, c) => {
+    const original = String(plainValue(cell.value)).trim();
+    const h = normHeader(original);
+    if (!h) return;
+    const def = EXCEL_COLS.find(x => x.aliases.includes(h));
+    if (def && !Object.values(colKey).includes(def.key)) colKey[c] = def.key; else ignored.push(original);
+  });
+  const has = k => Object.values(colKey).includes(k);
+  if (!has('sku')) throw new Error('No encontré la columna "SKU" en la primera fila de la hoja "Productos".');
+
+  const records = [];
+  ws.eachRow({ includeEmpty: false }, (row, n) => {
+    if (n === 1) return;
+    const raw = {};
+    for (const [c, key] of Object.entries(colKey)) raw[key] = plainValue(row.getCell(Number(c)).value, key === 'image');
+    if (Object.values(raw).every(v => String(v).trim() === '')) return;
+    records.push({ n, raw });
+  });
+  if (records.length > MAX_EXCEL_ROWS) throw new Error(`El Excel tiene ${records.length} filas; el máximo por carga es ${MAX_EXCEL_ROWS}.`);
+  if (!records.length) throw new Error('El Excel no tiene filas con datos.');
+  return buildPlan(records, has, ignored);
+}
+
+function buildPlan(records, has, ignored) {
+  const byId = new Map(products.map(p => [p.id, p]));
+  const bySku = new Map(products.map(p => [norm(p.sku), p]));
+  const touchedBy = new Map();
+  const items = [];
+
+  for (const { n, raw } of records) {
+    const rec = { row: n };
+    const errors = [], warnings = [];
+    const txt = k => String(raw[k] ?? '').trim();
+
+    rec.sku = txt('sku');
+    if (!rec.sku) errors.push('falta el SKU');
+    if (has('id')) rec.id = txt('id');
+    if (has('name')) { rec.name = txt('name'); if (!rec.name) errors.push('falta el nombre'); }
+    if (has('description')) rec.description = txt('description');
+    if (has('category')) rec.category = txt('category');
+    if (has('image')) {
+      rec.image = normalizeImage(txt('image'));
+      if (rec.image && !/^https:\/\//i.test(rec.image) && !rec.image.startsWith('assets/')) errors.push('la imagen debe empezar con https://');
+    }
+    for (const k of ['retail', 'wholesale']) {
+      if (!has(k) || txt(k) === '') continue;
+      const v = parseMoney(raw[k]);
+      if (!isFinite(v) || v < 0) errors.push(`el precio ${k === 'retail' ? 'minorista' : 'mayorista'} "${txt(k)}" no es válido`);
+      else rec[k] = money2(v);
+    }
+    if (has('active') && txt('active') !== '') {
+      const a = parseActive(raw.active);
+      if (a === null) errors.push(`"${txt('active')}" no se entiende en Publicado en tienda (usá Sí o No)`);
+      else rec.active = a;
+    }
+
+    const target = (rec.id && byId.get(rec.id)) || (rec.sku && bySku.get(norm(rec.sku))) || null;
+    if (target) {
+      if (norm(rec.sku) === norm(target.sku)) rec.sku = target.sku;
+      if (!has('name')) rec.name = target.name;
+      if (touchedBy.has(target.id)) errors.push(`repite el producto de la fila ${touchedBy.get(target.id)}`);
+      else touchedBy.set(target.id, n);
+    } else if (!has('name')) {
+      errors.push('falta la columna Nombre para crear productos nuevos');
+    }
+
+    const changes = [];
+    if (target && !errors.length) {
+      for (const k of DIFF_FIELDS) {
+        if (rec[k] === undefined) continue;
+        const from = k === 'active' ? target.active !== false
+          : k === 'category' ? (target.category || 'General')
+          : (k === 'retail' || k === 'wholesale') ? money2(Number(target[k]) || 0)
+          : String(target[k] ?? '').trim();
+        const to = k === 'category' ? (rec.category || 'General') : rec[k];
+        if (from !== to) changes.push({ k, from, to });
+      }
+    }
+    if (!target && !errors.length) {
+      if (!(rec.retail > 0)) warnings.push('sin precio minorista (queda en $0)');
+      if (rec.active !== false && !(rec.retail > 0)) warnings.push('quedaría publicado con precio $0');
+    }
+    items.push({ n, rec, target, errors, warnings, changes, status: errors.length ? 'error' : !target ? 'new' : changes.length ? 'mod' : 'same' });
+  }
+
+  // SKU únicos en el resultado final (se permite intercambiar SKU entre productos).
+  const newSkuOf = new Map(items.filter(i => i.target && !i.errors.length).map(i => [i.target.id, i.rec.sku]));
+  const owners = new Map();
+  const add = (sku, label, item) => { const k = norm(sku); if (!owners.has(k)) owners.set(k, []); owners.get(k).push({ label, item }); };
+  for (const p of products) add(newSkuOf.has(p.id) ? newSkuOf.get(p.id) : p.sku, `producto "${p.name}"`, null);
+  for (const i of items) if (!i.target && !i.errors.length) add(i.rec.sku, `fila ${i.n}`, i);
+  for (const [k, list] of owners) {
+    if (list.length < 2) continue;
+    for (const { item } of list) if (item) { item.errors.push(`el SKU "${k}" quedaría repetido`); item.status = 'error'; }
+    for (const i of items) {
+      if (i.target && !i.errors.length && norm(i.rec.sku) === k) { i.errors.push(`el SKU "${k}" quedaría repetido`); i.status = 'error'; }
+    }
+  }
+
+  const counts = { new: 0, mod: 0, same: 0, error: 0 };
+  items.forEach(i => { counts[i.status]++; });
+  return { items, counts, ignored };
+}
+
+/* ---------- vista previa y aplicar ---------- */
+
+function renderExcelPlan() {
+  const box = $('#excelResult');
+  if (!excelPlan) { box.innerHTML = ''; return; }
+  const { items, counts, ignored } = excelPlan;
+  const rank = { error: 0, new: 1, mod: 2, same: 3 };
+  const shown = items.filter(i => i.status !== 'same').sort((a, b) => rank[a.status] - rank[b.status] || a.n - b.n);
+  const LIMIT = 300;
+  const label = { error: ['bad', 'Error'], new: ['ok', 'Nuevo'], mod: ['warn', 'Modifica'] };
+
+  const rows = shown.slice(0, LIMIT).map(i => {
+    const [cls, name] = label[i.status];
+    let detail;
+    if (i.status === 'error') detail = i.errors.map(esc).join('; ');
+    else if (i.status === 'new') detail = `${esc(i.rec.name || '')}${i.rec.retail ? ' · ' + money(i.rec.retail) : ''}${i.warnings.length ? ` <span class="muted">(${esc(i.warnings.join('; '))})</span>` : ''}`;
+    else detail = i.changes.map(c => `<b>${esc(FIELD_LABEL[c.k])}</b>: ${esc(fmtVal(c.k, c.from))} → ${esc(fmtVal(c.k, c.to))}`).join('<br>');
+    return `<tr><td>${i.n}</td><td>${esc(i.rec.sku)}</td><td><span class="pill ${cls}">${name}</span></td><td>${detail}</td></tr>`;
+  }).join('');
+
+  const applicable = counts.new + counts.mod;
+  const blocked = counts.error > 0;
+  box.innerHTML = `
+    <div class="msg ${blocked ? 'err' : ''}">
+      <b>Vista previa:</b>
+      <span class="pill ok">${counts.new} nuevos</span>
+      <span class="pill warn">${counts.mod} modificados</span>
+      <span class="pill off">${counts.same} sin cambios</span>
+      <span class="pill ${blocked ? 'bad' : 'off'}">${counts.error} con errores</span>
+      ${ignored.length ? `<div class="muted small">Columnas ignoradas: ${ignored.map(esc).join(', ')}</div>` : ''}
+      ${blocked ? '<div class="small">Hay filas con errores. Corregilas en el Excel y subilo de nuevo, o elegí omitirlas.</div>' : ''}
+    </div>
+    ${shown.length ? `<div class="tablewrap"><table><thead><tr><th>Fila</th><th>SKU</th><th>Acción</th><th>Detalle</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${shown.length > LIMIT ? `<p class="muted small">Se muestran las primeras ${LIMIT} de ${shown.length} filas con cambios o errores.</p>` : ''}` : '<p class="muted">No hay cambios para aplicar.</p>'}
+    <div class="row-btn" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px">
+      ${blocked ? '<label><input type="checkbox" id="excelSkip"> Omitir las filas con error y aplicar el resto</label>' : ''}
+      <button type="button" class="primary" id="excelApply" ${applicable && !blocked ? '' : 'disabled'}>Aplicar ${applicable} cambio${applicable === 1 ? '' : 's'}</button>
+      <button type="button" class="action" id="excelDiscard">Descartar</button>
+    </div>`;
+  syncExcelApply();
+}
+
+$('#excelResult').addEventListener('change', e => {
+  if (e.target.id === 'excelSkip') syncExcelApply();
+});
+
+$('#excelResult').addEventListener('click', async e => {
+  if (e.target.id === 'excelDiscard') { excelPlan = null; renderExcelPlan(); status('Se descartó el Excel.'); return; }
+  if (e.target.id !== 'excelApply' || !excelApplyAllowed()) return;
+  const send = excelPlan.items.filter(i => i.status === 'new' || i.status === 'mod');
+  if (!send.length) return;
+  const sameCount = excelPlan.counts.same, errorCount = excelPlan.counts.error;
+  const nNew = send.filter(i => i.status === 'new').length, nMod = send.length - nNew;
+  if (!confirm(`Se aplicarán ${send.length} cambios en Google Sheets:\n• ${nNew} productos nuevos\n• ${nMod} productos modificados\n\nSi querés tener un respaldo, descargá antes el Excel actual. ¿Continuar?`)) return;
+  setBusy(true);
+  try {
+    status('Aplicando cambios…');
+    const rows = send.map(i => ({ ...i.rec, id: i.target ? i.target.id : undefined }));
+    const r = await api('upsertProducts', { rows });
+    excelPlan = null;
+    await loadProducts();
+    showMsg($('#excelResult'), `<b>Listo.</b> ${r.created} nuevos, ${r.updated} modificados, ${sameCount} sin cambios${errorCount ? `, ${errorCount} filas con error omitidas` : ''}.`);
+    status(`Excel aplicado: ${r.created} nuevos y ${r.updated} modificados.`);
+  } catch (err) {
+    showMsg($('#excelResult'), `<b>No se aplicó nada.</b><br>${esc(err.message).replace(/\n/g, '<br>')}`, true);
+    status('No se pudo aplicar el Excel: ' + err.message.split('\n')[0]);
+  } finally { setBusy(false); }
+});
+
+$('#excelDownload').addEventListener('click', async () => {
+  if (busy) return;
+  setBusy(true);
+  try { await downloadExcel(); } catch (err) { status('No se pudo generar el Excel: ' + err.message); }
+  finally { setBusy(false); }
+});
+
+$('#excelPick').addEventListener('click', () => { if (!busy) $('#excelFile').click(); });
+
+$('#excelFile').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || busy) return;
+  setBusy(true);
+  try {
+    status('Leyendo el Excel…');
+    excelPlan = await parseExcelFile(file);
+    renderExcelPlan();
+    const c = excelPlan.counts;
+    status(`Excel leído: ${c.new} nuevos, ${c.mod} modificados, ${c.same} sin cambios, ${c.error} con errores. Revisá la vista previa.`);
+  } catch (err) {
+    excelPlan = null;
+    showMsg($('#excelResult'), esc(err.message), true);
+    status(err.message);
+  } finally { setBusy(false); }
 });
 
 /* ------------------------------------------------------------------ importación inicial */
