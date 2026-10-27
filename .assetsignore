@@ -8,3 +8,4 @@ importar-productos.json
 node_modules
 .git
 .wrangler
+apps-script

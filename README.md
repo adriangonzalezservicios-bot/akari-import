@@ -52,6 +52,12 @@ Este sitio se despliega como **Worker** (`wrangler.jsonc` + `worker.js`). `worke
 - Variable obligatoria: `GOOGLE_APPS_SCRIPT_URL` (Settings → Variables and Secrets del Worker), con la URL de Apps Script que termina en `/exec`.
 - `.assetsignore` evita que se publiquen `importar-productos.json`, `README.md`, `worker.js` y `wrangler.jsonc`.
 
+## Panel de administración (admin.html)
+- **Revendedores con contraseña:** cargá correo + contraseña (botón "Generar" crea una segura). La cuenta se crea en Firebase y queda habilitada; el panel muestra los datos para copiar y enviar. Si la cuenta ya existe, su contraseña no se cambia: usá "Enviar enlace de nueva contraseña". Requiere en Firebase: Authentication → Settings → User actions → "Enable create (sign-up)" activado.
+- **Fotos en bloque:** botón "Examinar…", elegí varias fotos nombradas con el SKU (`PIOTT002.jpg`). Se reducen a 900 px, se guardan en una carpeta de tu Google Drive ("Akari Import - Fotos de productos") y se asignan al producto. También hay un botón "Foto" en cada fila.
+- **Modificación masiva:** tildá productos (hay filtros por texto, categoría, foto y estado) y aplicá categoría, publicar/ocultar y ajuste porcentual de precios con redondeo.
+- Estas funciones requieren `apps-script/Code.gs` versión 3 en Apps Script: pegarlo, ejecutar `autorizarPermisos` una vez (pide permiso de Drive) y publicar una nueva versión de la implementación. `?action=health` debe mostrar `"version":3`.
+
 ## Diagnóstico rápido
 - Abrí `URL_DE_APPS_SCRIPT/exec?action=health`: indica si están cargadas `FIREBASE_WEB_API_KEY` y `ADMIN_EMAILS`, si existen las 5 pestañas y cuántos productos hay (no muestra claves ni correos).
 - Si el sitio dice "No se pudo cargar el catálogo", el texto entre paréntesis indica la causa: falta `GOOGLE_APPS_SCRIPT_URL` en Cloudflare (Production, y hay que volver a desplegar), la URL `/exec` está mal copiada, o la implementación de Apps Script no tiene acceso "Cualquier persona".
