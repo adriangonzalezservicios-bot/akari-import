@@ -1,0 +1,111 @@
+/* —— Footer legal (AR) —— */
+.site-footer {
+  background: var(--ink);
+  color: rgba(255,255,255,.72);
+  margin-top: 24px;
+  padding: 40px clamp(16px, 3vw, 40px) 24px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.site-footer a {
+  color: rgba(255,255,255,.85);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: .15s;
+}
+.site-footer a:hover {
+  color: #fff;
+  border-bottom-color: var(--red);
+}
+.footer-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 28px 32px;
+}
+.footer-brand {
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: .04em;
+  color: #fff;
+  margin: 0 0 10px;
+}
+.footer-brand b { color: #f87171; }
+.footer-col h4 {
+  margin: 0 0 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+}
+.footer-col p { margin: 0 0 8px; }
+.footer-col ul { list-style: none; margin: 0; padding: 0; }
+.footer-col li { margin-bottom: 8px; }
+.footer-legal-note {
+  max-width: 1200px;
+  margin: 28px auto 0;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,.1);
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+  line-height: 1.6;
+}
+.footer-bottom {
+  max-width: 1200px;
+  margin: 16px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11px;
+  color: rgba(255,255,255,.4);
+}
+.footer-bottom a { color: rgba(255,255,255,.55); }
+
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr; gap: 22px; }
+  .site-footer { padding: 32px 16px 80px; }
+}
+
+.legal-page {
+  max-width: 720px;
+  margin: 32px auto 60px;
+  padding: 0 20px;
+}
+.legal-page h1 {
+  font-size: clamp(24px, 4vw, 32px);
+  font-weight: 800;
+  margin: 0 0 8px;
+  color: var(--ink);
+}
+.legal-page .legal-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.legal-page h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 28px 0 10px;
+  color: var(--ink);
+}
+.legal-page p, .legal-page li {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.65;
+}
+.legal-page ul { padding-left: 1.2em; margin: 0 0 12px; }
+.legal-page a { color: var(--red); }
+.legal-back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.legal-back:hover { color: var(--red); }
