@@ -38,10 +38,18 @@ function clean(s) {
 }
 
 function renderCategories() {
-  const cats = ['Todas', ...new Set(products.map(p => p.category || 'General'))];
-  $('#categories').innerHTML = cats.map(c =>
-    `<button class="chip ${c === category ? 'active' : ''}" data-category="${clean(c)}">${clean(c)}</button>`
-  ).join('');
+  const cats = ['Todas', ...new Set(products.map(p => p.category || 'General'))].sort((a, b) => {
+    if (a === 'Todas') return -1;
+    if (b === 'Todas') return 1;
+    return a.localeCompare(b, 'es');
+  });
+  const sel = $('#categoryList');
+  if (!sel) return;
+  const cur = category;
+  sel.innerHTML = cats.map(c => {
+    const label = c === 'Todas' ? 'Todas las categorías' : c;
+    return `<option value="${clean(c)}" ${c === cur ? 'selected' : ''}>${clean(label)}</option>`;
+  }).join('');
 }
 
 function renderProducts() {
@@ -65,6 +73,7 @@ function renderProducts() {
         <div class="product-main">
           <div class="sku-row">
             <span class="sku">${clean(p.sku)}</span>
+            ${p.stock === 0 ? '<span class="stock-badge">Sin stock</span>' : (p.stock > 0 ? `<span class="stock-badge ok">${p.stock} u.</span>` : '')}
           </div>
           <h3>${clean(p.name)}</h3>
           <p class="desc">${clean(p.description || 'Consultar detalles del producto.')}</p>
@@ -74,7 +83,7 @@ function renderProducts() {
             <div class="price">${money(shownPrice(p))}</div>
             <div class="price-note">${reseller ? 'Precio mayorista' : 'Precio minorista'}</div>
           </div>
-          <button class="add" data-add="${clean(p.id)}">+ Agregar</button>
+          <button class="add" data-add="${clean(p.id)}"${p.stock === 0 ? ' disabled title="Sin stock"' : ''}>${p.stock === 0 ? 'Sin stock' : '+ Agregar'}</button>
         </div>
       </article>
     `).join('')
@@ -205,9 +214,9 @@ async function submitOrder() {
 $('#search').addEventListener('input', renderProducts);
 $('#searchClear').addEventListener('click', () => { $('#search').value = ''; renderProducts(); });
 $('#sort').addEventListener('change', renderProducts);
-$('#categories').addEventListener('click', e => {
-  const b = e.target.closest('[data-category]');
-  if (b) { category = b.dataset.category; renderCategories(); renderProducts(); }
+$('#categoryList')?.addEventListener('change', e => {
+  category = e.target.value || 'Todas';
+  renderProducts();
 });
 $('#products').addEventListener('click', e => {
   const z = e.target.closest('[data-zoom]');
@@ -219,6 +228,7 @@ $('#products').addEventListener('click', e => {
   }
   const b = e.target.closest('[data-add]');
   if (b) {
+    if (b.disabled) return;
     cart[b.dataset.add] = (cart[b.dataset.add] || 0) + 1;
     renderCart();
     toast('Producto agregado al pedido');
