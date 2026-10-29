@@ -7,6 +7,7 @@
   <title>Akari Import | Catálogo</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="footer-legal.css">
+  <link rel="stylesheet" href="category-ui.css">
 </head>
 <body>
   <header class="top">
@@ -30,8 +31,8 @@
     <section class="hero">
       <div>
         <p class="eyebrow">CATÁLOGO ONLINE · AKARI IMPORT</p>
-        <h1>Productos para tu negocio.</h1>
-        <p>Consultá nuestra lista de productos y armá tu pedido en pocos pasos. Precios minoristas públicos · mayoristas con acceso.</p>
+        <h1>Catálogo de productos</h1>
+        <p>Precios minoristas públicos · lista mayorista con acceso. Armá tu pedido y confirmalo por WhatsApp.</p>
         <a class="primary" href="#catalogo">Ver catálogo</a>
       </div>
       <div class="hero-mark">AKARI<span>IMPORT</span></div>
@@ -50,7 +51,12 @@
           <option value="price-desc">Precio: mayor a menor</option>
         </select>
       </div>
-      <div id="categories" class="chips"></div>
+      <div class="category-list-wrap">
+        <label class="category-list-label" for="categoryList">Categoría</label>
+        <select id="categoryList" class="category-list" aria-label="Filtrar por categoría">
+          <option value="Todas">Todas las categorías</option>
+        </select>
+      </div>
       <div id="products" class="products"></div>
     </section>
 
