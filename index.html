@@ -63,10 +63,60 @@
     </section>
   </main>
 
-  <footer>
-    <span>AKARI IMPORT</span>
-    <span>Catálogo y consultas comerciales</span>
+  <footer class="site-footer" id="legales">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <p class="footer-brand">AKARI <b>IMPORT</b></p>
+        <p>Catálogo online de tecnología, hogar y accesorios. Venta mayorista y minorista.</p>
+        <p style="margin-top:12px"><strong style="color:#fff">WhatsApp:</strong><br>
+          <a href="https://wa.me/5491133672920" target="_blank" rel="noopener">+54 9 11 3367-2920</a></p>
+        <p><strong style="color:#fff">Zona:</strong> Castelar / Gran Buenos Aires, Argentina</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#catalogo">Catálogo</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+          <li><a href="#loginOpen" id="footerLogin">Acceso revendedores</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="terminos.html">Términos y condiciones</a></li>
+          <li><a href="privacidad.html">Política de privacidad</a></li>
+          <li><a href="terminos.html#consumidor">Defensa del consumidor</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Identificación</h4>
+        <p>Razón social / nombre comercial: <strong style="color:#fff">AKARI IMPORT</strong></p>
+        <p>CUIT: <strong style="color:#fff">30-XXXXXXXX-X</strong> <span style="opacity:.6">(completar)</span></p>
+        <p>Domicilio comercial: Castelar, Provincia de Buenos Aires, Argentina</p>
+      </div>
+    </div>
+    <p class="footer-legal-note">
+      Los precios publicados en el catálogo son orientativos y pueden modificarse sin previo aviso. La confirmación de stock, precio final, forma de pago y envío se realiza al momento de formalizar el pedido (por WhatsApp o canal acordado).
+      Este sitio se destina principalmente a consultas comerciales y pedidos; las operaciones se rigen por la legislación de la República Argentina, en particular la Ley N.º 24.240 de Defensa del Consumidor y normas complementarias, cuando corresponda la relación de consumo.
+      Los datos personales se tratan conforme a la Ley N.º 25.326 de Protección de los Datos Personales. Al utilizar este sitio y enviar un pedido, aceptás los
+      <a href="terminos.html">Términos y condiciones</a> y la <a href="privacidad.html">Política de privacidad</a>.
+    </p>
+    <div class="footer-bottom">
+      <span>© <span id="footerYear">2026</span> AKARI IMPORT · Argentina</span>
+      <span>
+        <a href="terminos.html">Términos</a> ·
+        <a href="privacidad.html">Privacidad</a> ·
+        <a href="https://www.argentina.gob.ar/produccion/defensadelconsumidor" target="_blank" rel="noopener">Defensa del Consumidor</a>
+      </span>
+    </div>
   </footer>
+  <script>
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
+    document.getElementById('footerLogin')?.addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('loginOpen')?.click();
+    });
+  </script>
 
   <a class="wa-float" target="_blank" rel="noopener" href="https://wa.me/5491133672920" aria-label="WhatsApp">WhatsApp</a>
 
