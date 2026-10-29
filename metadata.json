@@ -1,0 +1,8 @@
+{
+  "name": "Akari Import",
+  "description": "Catálogo online de tecnología, hogar y accesorios con precios minoristas y mayoristas, carrito de pedidos para WhatsApp y panel de administración.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

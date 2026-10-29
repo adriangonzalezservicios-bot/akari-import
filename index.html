@@ -2,144 +2,19 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0f0f0f">
-  <title>Akari Import | Catálogo</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="footer-legal.css">
-  <link rel="stylesheet" href="category-ui.css">
+  <title>Akari Import</title>
+  <meta name="description" content="Catálogo online de tecnología, hogar y accesorios con precios minoristas y mayoristas, carrito de pedidos para WhatsApp y panel de administración.">
+  <meta property="og:title" content="Akari Import">
+  <meta property="og:description" content="Catálogo online de tecnología, hogar y accesorios con precios minoristas y mayoristas, carrito de pedidos para WhatsApp y panel de administración.">
+  <link rel="icon" type="image/png" href="/assets/akari-logo-transparent.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <header class="top">
-    <a class="brand" href="#">
-      <img src="assets/akari-logo-transparent.png" onerror="this.onerror=null;this.src='assets/akari-logo.png'" alt="Akari Import">
-      <span>AKARI <b>IMPORT</b></span>
-    </a>
-    <div class="search">
-      <input id="search" placeholder="Buscar por producto o SKU…" aria-label="Buscar productos">
-      <button id="searchClear" aria-label="Limpiar búsqueda">×</button>
-    </div>
-    <nav>
-      <a href="#catalogo">Catálogo</a>
-      <a href="#contacto">Contacto</a>
-      <button class="outline" id="loginOpen">Login revendedores</button>
-      <button class="cart-button" id="cartOpen">Carrito <span id="cartCount">0</span></button>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <div>
-        <p class="eyebrow">CATÁLOGO ONLINE · AKARI IMPORT</p>
-        <h1>Catálogo de productos</h1>
-        <p>Precios minoristas públicos · lista mayorista con acceso. Armá tu pedido y confirmalo por WhatsApp.</p>
-        <a class="primary" href="#catalogo">Ver catálogo</a>
-      </div>
-      <div class="hero-mark">AKARI<span>IMPORT</span></div>
-    </section>
-
-    <section id="catalogo" class="catalog">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" style="color:var(--red)">NUESTRO CATÁLOGO</p>
-          <h2>Lista de precios</h2>
-          <p id="catalogStatus" class="muted">Preparando catálogo…</p>
-        </div>
-      </div>
-      <div class="filters-bar" role="search">
-        <label for="categoryList">Categoría
-          <select id="categoryList" class="category-list" aria-label="Filtrar por categoría">
-            <option value="Todas">Todas las categorías</option>
-          </select>
-        </label>
-        <label for="sort">Orden
-          <select id="sort">
-            <option value="name">Nombre A–Z</option>
-            <option value="price-asc">Precio: menor a mayor</option>
-            <option value="price-desc">Precio: mayor a menor</option>
-          </select>
-        </label>
-      </div>
-      <div id="products" class="products" aria-live="polite"></div>
-    </section>
-
-    <section class="contact" id="contacto">
-      <div>
-        <p class="eyebrow">¿TENÉS UNA CONSULTA?</p>
-        <h2>Hablemos de tu próximo pedido.</h2>
-        <p>Escribinos por WhatsApp para consultar disponibilidad, envío y condiciones comerciales.</p>
-      </div>
-      <a class="primary" target="_blank" rel="noopener" href="https://wa.me/5491133672920">Contactar por WhatsApp</a>
-    </section>
-  </main>
-
-  <footer class="site-footer" id="legales">
-    <div class="footer-grid">
-      <div class="footer-col">
-        <p class="footer-brand">AKARI <b>IMPORT</b></p>
-        <p>Catálogo online de tecnología, hogar y accesorios. Venta mayorista y minorista.</p>
-        <p style="margin-top:12px"><strong style="color:#fff">WhatsApp:</strong><br>
-          <a href="https://wa.me/5491133672920" target="_blank" rel="noopener">+54 9 11 3367-2920</a></p>
-        <p><strong style="color:#fff">Zona:</strong> Castelar / Gran Buenos Aires, Argentina</p>
-      </div>
-      <div class="footer-col">
-        <h4>Legal</h4>
-        <a href="terminos.html">Términos y condiciones</a>
-        <a href="privacidad.html">Política de privacidad</a>
-        <a href="https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario" target="_blank" rel="noopener">Defensa del Consumidor</a>
-      </div>
-      <div class="footer-col">
-        <h4>Info</h4>
-        <p class="footer-legal-note">
-          Los precios publicados en el catálogo son orientativos y pueden modificarse sin previo aviso. La confirmación de stock, precio final, forma de pago y envío se realiza al momento de formalizar el pedido (por WhatsApp o canal acordado).
-        </p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© Akari Import · Argentina</p>
-      <p class="muted small">El pedido se registra online antes de abrir WhatsApp. La confirmación final de stock y envío se realiza por mensaje.</p>
-    </div>
-  </footer>
-
-  <div id="drawerBackdrop" class="hidden"></div>
-  <aside id="cartDrawer" class="cart-drawer" aria-label="Carrito">
-    <header>
-      <h2>Tu pedido</h2>
-      <button id="cartClose" aria-label="Cerrar">×</button>
-    </header>
-    <div id="cartItems"></div>
-    <footer>
-      <div class="cart-total"><span>Total estimado</span><strong id="cartTotal">$0</strong></div>
-      <label>Nombre o comercio<input id="customerName" placeholder="Tu nombre"></label>
-      <label>Comentario<textarea id="customerNote" rows="2" placeholder="Opcional"></textarea></label>
-      <p id="orderMessage" class="muted small"></p>
-      <button class="primary" id="submitOrder">Confirmar y abrir WhatsApp</button>
-    </footer>
-  </aside>
-
-  <div id="loginModal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="modal-card">
-      <h2>Acceso revendedores</h2>
-      <p class="muted">Ingresá con tu cuenta autorizada para ver precios mayoristas.</p>
-      <label>Email<input id="loginEmail" type="email" autocomplete="username"></label>
-      <label>Contraseña<input id="loginPass" type="password" autocomplete="current-password"></label>
-      <p id="loginError" class="msg err hidden"></p>
-      <div class="row-btn">
-        <button class="primary" id="loginSubmit">Ingresar</button>
-        <button class="outline" id="loginCancel">Cancelar</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="zoomModal" class="modal hidden" role="dialog" aria-modal="true">
-    <div class="zoom-card">
-      <button id="zoomClose" aria-label="Cerrar">×</button>
-      <img id="zoomImg" alt="">
-      <p id="zoomTitle"></p>
-    </div>
-  </div>
-
-  <div id="toast" role="status"></div>
-  <script type="module" src="app.js"></script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
