@@ -10,7 +10,7 @@ main{max-width:1200px;margin:35px auto;padding:20px}
 .admin-head{display:flex;justify-content:space-between;align-items:center;gap:20px}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0}
 .tabs button{border:1px solid var(--line);background:white;border-radius:8px;padding:10px}
-.tabs button.active{background:var(--green,#315b49);color:white}
+.tabs button.active{background:var(--green);color:white}
 .panel{background:white;border:1px solid var(--line);padding:20px;border-radius:12px;margin:12px 0}
 .gridform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .gridform label,.toolbar label{font-size:12px;font-weight:600}
@@ -20,29 +20,37 @@ main{max-width:1200px;margin:35px auto;padding:20px}
 .tablewrap{overflow:auto}
 table{border-collapse:collapse;width:100%;font-size:12px}
 td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+td input{max-width:150px;padding:7px;border:1px solid var(--line);border-radius:5px}
+td input[type=checkbox]{max-width:none}
 .action{border:1px solid var(--line);background:white;border-radius:6px;padding:7px;cursor:pointer}
+.action:disabled{opacity:.5;cursor:default}
 .hidden{display:none!important}
 .box{border:1px solid var(--line);border-radius:10px;padding:14px;margin:14px 0;background:#fafaf7}
 .box h3{margin:0 0 4px;font-size:15px}
+.box p{margin:4px 0 10px}
 .toolbar{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end}
 .toolbar .row-btn{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .thumb{width:44px;height:44px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
 .pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:700}
 .pill.ok{background:#ecfdf5;color:#047857}
 .pill.off{background:#fef2f2;color:#b91c1c}
-#status{margin:10px 0;font-size:13px}
+#status{margin:10px 0;font-size:13px;color:#555}
 .primary{background:var(--green,#315b49);color:#fff;border:0;border-radius:8px;padding:10px 14px;font-weight:700;cursor:pointer}
 .muted{color:#68756e;font-size:13px}
 .small{font-size:12px}
+progress{width:100%;height:8px}
 </style>
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="index.html"><span>AKARI <b>IMPORT</b></span></a>
+  <a class="brand" href="index.html"><img src="assets/akari-logo-transparent.png" onerror="this.src='assets/akari-logo.png'" alt=""><span>AKARI <b>IMPORT</b></span></a>
   <nav><a href="index.html">Ver tienda</a><button class="outline" id="logoutBtn">Salir</button></nav>
 </header>
 <main>
-  <div class="admin-head"><div><h1 style="margin:0">Panel de administración</h1><p class="muted" id="adminUser"></p></div></div>
+  <div class="admin-head">
+    <div><h1 style="margin:0">Panel de administración</h1><p class="muted" id="adminUser"></p></div>
+    <button class="primary" id="importBtn">Importar productos iniciales</button>
+  </div>
   <div class="tabs">
     <button class="active" data-tab="products">Productos</button>
     <button data-tab="orders">Pedidos</button>
@@ -59,27 +67,72 @@ td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-
       <label>Precio mayorista (ARS)<input id="wholesale" type="number" min="0" required></label>
       <label>Categoría<input id="category" value="General"></label>
       <label>Stock (cantidad)<input id="stock" type="number" min="0" step="1" placeholder="Vacío = no controla"></label>
-      <label>Imagen URL (HTTPS)<input id="image" type="url" placeholder="https://…"></label>
+      <label>Imagen URL (HTTPS)<input id="image" type="url" placeholder="https://… (o usá el botón Foto de la tabla)"></label>
       <label class="wide">Descripción<textarea id="description" rows="2"></textarea></label>
       <label><input type="checkbox" id="active" checked> Publicado</label>
       <div class="wide"><button class="primary">Guardar producto</button> <button type="button" class="action" id="clearForm">Limpiar</button></div>
     </form>
+
+    <div class="box" id="excelBox">
+      <h3>Excel de productos</h3>
+      <p class="muted small">Descargá, editá y subí el Excel para actualizar productos en bloque.</p>
+      <div class="toolbar">
+        <label>Qué descargar
+          <select id="excelScope">
+            <option value="todos">Todos los productos</option>
+            <option value="filtrados">Los que se ven (filtros)</option>
+            <option value="seleccionados">Solo los seleccionados</option>
+          </select>
+        </label>
+        <div class="row-btn">
+          <button type="button" class="primary" id="excelDownload">Descargar Excel</button>
+          <button type="button" class="action" id="excelPick">Subir Excel editado…</button>
+          <input id="excelFile" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+        </div>
+      </div>
+      <div id="excelResult"></div>
+    </div>
+
+    <div class="box" id="photosBox">
+      <h3>Cargar fotos en bloque</h3>
+      <p class="muted small">Archivos nombrados como el SKU (ej. PIOTT002.jpg). Se reducen y guardan en Drive.</p>
+      <div class="row-btn" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button type="button" class="primary" id="photosPick">Examinar…</button>
+        <input id="photosFile" type="file" accept="image/*" multiple hidden>
+        <button type="button" class="action" id="photosUpload" disabled>Subir fotos</button>
+        <button type="button" class="action" id="photosClear" disabled>Vaciar lista</button>
+      </div>
+      <progress id="photosProgress" class="hidden" value="0" max="100"></progress>
+      <div class="tablewrap" style="margin-top:10px">
+        <table><thead><tr><th>Archivo</th><th>Producto</th><th>Resultado</th></tr></thead>
+        <tbody id="photosRows"></tbody></table>
+      </div>
+    </div>
+
     <div class="box" id="bulkBox">
       <h3>Modificación masiva</h3>
       <p class="muted small">Tildá productos y aplicá cambios. Campos vacíos = sin cambios. <b id="selCount">0 seleccionados</b></p>
       <div class="toolbar">
         <label>Nueva categoría<input id="bulkCategory" placeholder="Sin cambios"></label>
-        <label>Publicación<select id="bulkActive"><option value="">Sin cambios</option><option value="true">Publicar</option><option value="false">Ocultar</option></select></label>
-        <label>Stock / disponibilidad<select id="bulkStockStatus"><option value="">Sin cambios</option><option value="out">Sin stock (0)</option><option value="qty">Fijar cantidad…</option></select></label>
+        <label>Publicación
+          <select id="bulkActive"><option value="">Sin cambios</option><option value="true">Publicar</option><option value="false">Ocultar</option></select>
+        </label>
+        <label>Stock / disponibilidad
+          <select id="bulkStockStatus"><option value="">Sin cambios</option><option value="out">Sin stock (cantidad 0)</option><option value="qty">Fijar cantidad…</option></select>
+        </label>
         <label>Cantidad de stock<input id="bulkStockQty" type="number" min="0" step="1" placeholder="ej. 0, 5, 20"></label>
-        <label>Precio minorista fijo<input id="bulkRetailPrice" type="number" min="0" step="1" placeholder="ARS"></label>
-        <label>Precio mayorista fijo<input id="bulkWholesalePrice" type="number" min="0" step="1" placeholder="ARS"></label>
-        <label>Minorista %<input id="bulkRetail" type="number" step="0.1" placeholder="+10 o -5"></label>
-        <label>Mayorista %<input id="bulkWholesale" type="number" step="0.1" placeholder="+10 o -5"></label>
-        <label>Redondear %<select id="bulkRound"><option value="1">$1</option><option value="10">$10</option><option value="100" selected>$100</option><option value="1000">$1000</option></select></label>
+        <label>Precio minorista fijo (ARS)<input id="bulkRetailPrice" type="number" min="0" step="1" placeholder="Sin cambios"></label>
+        <label>Precio mayorista fijo (ARS)<input id="bulkWholesalePrice" type="number" min="0" step="1" placeholder="Sin cambios"></label>
+        <label>Precio minorista %<input id="bulkRetail" type="number" step="0.1" placeholder="ej. 10 o -5"></label>
+        <label>Precio mayorista %<input id="bulkWholesale" type="number" step="0.1" placeholder="ej. 10 o -5"></label>
+        <label>Redondear % a
+          <select id="bulkRound"><option value="1">$1</option><option value="10">$10</option><option value="100" selected>$100</option><option value="1000">$1.000</option></select>
+        </label>
         <div class="row-btn"><button type="button" class="primary" id="bulkApply">Aplicar a seleccionados</button></div>
       </div>
+      <p class="muted small" style="margin-top:8px">“Sin stock” pone cantidad 0. Para sacarlo del catálogo: Publicación → Ocultar. Precio fijo reemplaza; % ajusta sobre el actual.</p>
     </div>
+
     <div class="toolbar" style="margin-bottom:10px">
       <label>Buscar<input id="productSearch" placeholder="SKU o nombre…"></label>
       <label>Categoría<select id="productCategoryFilter"><option value="">Todas</option></select></label>
@@ -87,15 +140,21 @@ td,th{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-
       <label>Estado<select id="productStateFilter"><option value="">Todos</option><option value="pub">Publicados</option><option value="hid">Ocultos</option></select></label>
       <div class="muted small" id="filterCount"></div>
     </div>
-    <div class="tablewrap"><table><thead><tr>
-      <th><input type="checkbox" id="selectAll"></th><th></th><th>SKU</th><th>Nombre</th><th>Categoría</th><th>Minorista</th><th>Mayorista</th><th>Stock</th><th>Estado</th><th></th>
-    </tr></thead><tbody id="productRows"></tbody></table></div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr>
+          <th><input type="checkbox" id="selectAll" aria-label="Seleccionar todos"></th>
+          <th></th><th>SKU</th><th>Nombre</th><th>Categoría</th><th>Minorista</th><th>Mayorista</th><th>Stock</th><th>Estado</th><th></th>
+        </tr></thead>
+        <tbody id="productRows"></tbody>
+      </table>
+    </div>
     <p id="status"></p>
     <input id="rowPhotoFile" type="file" accept="image/*" hidden>
   </section>
-  <section id="ordersPanel" class="panel hidden"><h2>Pedidos</h2><div id="ordersBox"></div></section>
-  <section id="resellersPanel" class="panel hidden"><h2>Revendedores</h2><div id="resellersBox"></div></section>
-  <section id="historyPanel" class="panel hidden"><h2>Historial</h2><div id="historyBox"></div></section>
+  <section id="ordersPanel" class="panel hidden"><h2>Pedidos</h2><div id="ordersBox" class="muted">Cargando…</div></section>
+  <section id="resellersPanel" class="panel hidden"><h2>Revendedores</h2><div id="resellersBox" class="muted">Cargando…</div></section>
+  <section id="historyPanel" class="panel hidden"><h2>Historial</h2><div id="historyBox" class="muted">Cargando…</div></section>
 </main>
 <script type="module" src="admin.js"></script>
 </body>
