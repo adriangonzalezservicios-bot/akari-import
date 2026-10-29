@@ -43,21 +43,24 @@
         <div>
           <p class="eyebrow" style="color:var(--red)">NUESTRO CATÁLOGO</p>
           <h2>Lista de precios</h2>
-          <p id="catalogStatus" class="muted">Conectando catálogo online…</p>
+          <p id="catalogStatus" class="muted">Preparando catálogo…</p>
         </div>
-        <select id="sort">
-          <option value="name">Ordenar: nombre</option>
-          <option value="price-asc">Precio: menor a mayor</option>
-          <option value="price-desc">Precio: mayor a menor</option>
-        </select>
       </div>
-      <div class="category-list-wrap">
-        <label class="category-list-label" for="categoryList">Categoría</label>
-        <select id="categoryList" class="category-list" aria-label="Filtrar por categoría">
-          <option value="Todas">Todas las categorías</option>
-        </select>
+      <div class="filters-bar" role="search">
+        <label for="categoryList">Categoría
+          <select id="categoryList" class="category-list" aria-label="Filtrar por categoría">
+            <option value="Todas">Todas las categorías</option>
+          </select>
+        </label>
+        <label for="sort">Orden
+          <select id="sort">
+            <option value="name">Nombre A–Z</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+          </select>
+        </label>
       </div>
-      <div id="products" class="products"></div>
+      <div id="products" class="products" aria-live="polite"></div>
     </section>
 
     <section class="contact" id="contacto">
@@ -80,90 +83,61 @@
         <p><strong style="color:#fff">Zona:</strong> Castelar / Gran Buenos Aires, Argentina</p>
       </div>
       <div class="footer-col">
-        <h4>Navegación</h4>
-        <ul>
-          <li><a href="#catalogo">Catálogo</a></li>
-          <li><a href="#contacto">Contacto</a></li>
-          <li><a href="#loginOpen" id="footerLogin">Acceso revendedores</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
         <h4>Legal</h4>
-        <ul>
-          <li><a href="terminos.html">Términos y condiciones</a></li>
-          <li><a href="privacidad.html">Política de privacidad</a></li>
-          <li><a href="terminos.html#consumidor">Defensa del consumidor</a></li>
-        </ul>
+        <a href="terminos.html">Términos y condiciones</a>
+        <a href="privacidad.html">Política de privacidad</a>
+        <a href="https://www.argentina.gob.ar/produccion/defensadelconsumidor/formulario" target="_blank" rel="noopener">Defensa del Consumidor</a>
       </div>
       <div class="footer-col">
-        <h4>Identificación</h4>
-        <p>Razón social / nombre comercial: <strong style="color:#fff">AKARI IMPORT</strong></p>
-        <p>CUIT: <strong style="color:#fff">30-XXXXXXXX-X</strong> <span style="opacity:.6">(completar)</span></p>
-        <p>Domicilio comercial: Castelar, Provincia de Buenos Aires, Argentina</p>
+        <h4>Info</h4>
+        <p class="footer-legal-note">
+          Los precios publicados en el catálogo son orientativos y pueden modificarse sin previo aviso. La confirmación de stock, precio final, forma de pago y envío se realiza al momento de formalizar el pedido (por WhatsApp o canal acordado).
+        </p>
       </div>
     </div>
-    <p class="footer-legal-note">
-      Los precios publicados en el catálogo son orientativos y pueden modificarse sin previo aviso. La confirmación de stock, precio final, forma de pago y envío se realiza al momento de formalizar el pedido (por WhatsApp o canal acordado).
-      Este sitio se destina principalmente a consultas comerciales y pedidos; las operaciones se rigen por la legislación de la República Argentina, en particular la Ley N.º 24.240 de Defensa del Consumidor y normas complementarias, cuando corresponda la relación de consumo.
-      Los datos personales se tratan conforme a la Ley N.º 25.326 de Protección de los Datos Personales. Al utilizar este sitio y enviar un pedido, aceptás los
-      <a href="terminos.html">Términos y condiciones</a> y la <a href="privacidad.html">Política de privacidad</a>.
-    </p>
     <div class="footer-bottom">
-      <span>© <span id="footerYear">2026</span> AKARI IMPORT · Argentina</span>
-      <span>
-        <a href="terminos.html">Términos</a> ·
-        <a href="privacidad.html">Privacidad</a> ·
-        <a href="https://www.argentina.gob.ar/produccion/defensadelconsumidor" target="_blank" rel="noopener">Defensa del Consumidor</a>
-      </span>
+      <p>© Akari Import · Argentina</p>
+      <p class="muted small">El pedido se registra online antes de abrir WhatsApp. La confirmación final de stock y envío se realiza por mensaje.</p>
     </div>
   </footer>
-  <script>
-    document.getElementById('footerYear').textContent = new Date().getFullYear();
-    document.getElementById('footerLogin')?.addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('loginOpen')?.click();
-    });
-  </script>
 
-  <a class="wa-float" target="_blank" rel="noopener" href="https://wa.me/5491133672920" aria-label="WhatsApp">WhatsApp</a>
-
-  <div class="modal hidden" id="imageModal">
-    <button class="close" data-close="imageModal">×</button>
-    <img id="zoomImage" alt="Imagen ampliada">
-    <div id="zoomTitle"></div>
-  </div>
-
-  <div class="modal hidden" id="loginModal">
-    <div class="dialog">
-      <button class="close" data-close="loginModal">×</button>
-      <p class="eyebrow" style="color:var(--red)">ACCESO PRIVADO</p>
-      <h2>Ingresar</h2>
-      <form id="loginForm">
-        <label>Correo electrónico<input type="email" id="email" required autocomplete="username"></label>
-        <label>Contraseña<input type="password" id="password" required autocomplete="current-password"></label>
-        <button class="primary full" style="margin-top:18px">Ingresar</button>
-        <p class="muted small">El acceso debe estar habilitado por administración.</p>
-        <p id="loginError" class="error"></p>
-      </form>
-    </div>
-  </div>
-
-  <div class="drawer-backdrop hidden" id="drawerBackdrop"></div>
-  <aside class="drawer" id="cartDrawer">
-    <div class="drawer-head">
+  <div id="drawerBackdrop" class="hidden"></div>
+  <aside id="cartDrawer" class="cart-drawer" aria-label="Carrito">
+    <header>
       <h2>Tu pedido</h2>
-      <button class="close" id="cartClose">×</button>
-    </div>
+      <button id="cartClose" aria-label="Cerrar">×</button>
+    </header>
     <div id="cartItems"></div>
-    <div class="cart-bottom">
-      <label>Nombre / comercio<input id="customerName" placeholder="Nombre del cliente"></label>
-      <label>Comentario (opcional)<textarea id="customerNote" rows="2" placeholder="Envío, consulta, etc."></textarea></label>
-      <div class="total"><span>Total estimado</span><strong id="cartTotal">$0</strong></div>
-      <button class="primary full" id="submitOrder">Confirmar pedido por WhatsApp</button>
-      <p class="muted small">El pedido se registra online antes de abrir WhatsApp. La confirmación final de stock y envío se realiza por mensaje.</p>
-      <p id="orderMessage" class="error"></p>
-    </div>
+    <footer>
+      <div class="cart-total"><span>Total estimado</span><strong id="cartTotal">$0</strong></div>
+      <label>Nombre o comercio<input id="customerName" placeholder="Tu nombre"></label>
+      <label>Comentario<textarea id="customerNote" rows="2" placeholder="Opcional"></textarea></label>
+      <p id="orderMessage" class="muted small"></p>
+      <button class="primary" id="submitOrder">Confirmar y abrir WhatsApp</button>
+    </footer>
   </aside>
+
+  <div id="loginModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>Acceso revendedores</h2>
+      <p class="muted">Ingresá con tu cuenta autorizada para ver precios mayoristas.</p>
+      <label>Email<input id="loginEmail" type="email" autocomplete="username"></label>
+      <label>Contraseña<input id="loginPass" type="password" autocomplete="current-password"></label>
+      <p id="loginError" class="msg err hidden"></p>
+      <div class="row-btn">
+        <button class="primary" id="loginSubmit">Ingresar</button>
+        <button class="outline" id="loginCancel">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="zoomModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="zoom-card">
+      <button id="zoomClose" aria-label="Cerrar">×</button>
+      <img id="zoomImg" alt="">
+      <p id="zoomTitle"></p>
+    </div>
+  </div>
 
   <div id="toast" role="status"></div>
   <script type="module" src="app.js"></script>
