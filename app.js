@@ -1,6 +1,7 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { firebaseConfig } from './firebase-config.js';
+import { readCachedCatalog, writeCachedCatalog, showSkeletons } from './catalog-cache.js';
 
 const $ = s => document.querySelector(s);
 const money = n => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(Number(n) || 0);
@@ -126,9 +127,24 @@ function closeCart() {
 }
 
 async function refresh() {
+  const cached = readCachedCatalog();
+  if (cached && cached.length && !products.length) {
+    products = cached;
+    renderCategories();
+    renderProducts();
+    $('#catalogStatus').textContent = cached.length + ' productos (caché local) · actualizando…';
+  } else if (!products.length) {
+    showSkeletons(8);
+    $('#catalogStatus').textContent = 'Cargando catálogo…';
+  }
+
   try {
     const d = await api('catalog', {}, 'GET');
     products = d.products || [];
+    writeCachedCatalog(products.map(p => ({
+      id: p.id, sku: p.sku, name: p.name, description: p.description,
+      category: p.category, image: p.image, retail: p.retail, active: p.active, stock: p.stock
+    })));
     if (user) {
       try {
         const role = await api('myRole');
@@ -150,8 +166,14 @@ async function refresh() {
     renderCart();
     updateLoginButton();
   } catch (e) {
-    $('#catalogStatus').textContent = 'No se pudo cargar el catálogo (' + e.message + '). Revisá la configuración del backend.';
-    toast(e.message);
+    if (products.length) {
+      $('#catalogStatus').textContent = products.length + ' productos (sin conexión al servidor)';
+      toast('Mostrando última versión guardada. ' + e.message);
+    } else {
+      $('#catalogStatus').textContent = 'No se pudo cargar el catálogo (' + e.message + ').';
+      $('#products').innerHTML = '<div class="empty">No pudimos cargar los productos. Revisá tu conexión e intentá de nuevo.</div>';
+      toast(e.message);
+    }
   }
 }
 
@@ -221,9 +243,12 @@ $('#categoryList')?.addEventListener('change', e => {
 $('#products').addEventListener('click', e => {
   const z = e.target.closest('[data-zoom]');
   if (z) {
-    $('#zoomImage').src = z.dataset.zoom;
-    $('#zoomTitle').textContent = z.dataset.title;
-    $('#imageModal').classList.remove('hidden');
+    const img = $('#zoomImg') || $('#zoomImage');
+    const title = $('#zoomTitle');
+    const modal = $('#zoomModal') || $('#imageModal');
+    if (img) img.src = z.dataset.zoom;
+    if (title) title.textContent = z.dataset.title;
+    if (modal) modal.classList.remove('hidden');
     return;
   }
   const b = e.target.closest('[data-add]');
@@ -252,12 +277,6 @@ $('#cartItems').addEventListener('click', e => {
   }
 });
 $('#submitOrder').addEventListener('click', submitOrder);
-document.querySelectorAll('[data-close]').forEach(b =>
-  b.addEventListener('click', () => $('#' + b.dataset.close).classList.add('hidden'))
-);
-$('#imageModal').addEventListener('click', e => {
-  if (e.target.id === 'imageModal') e.currentTarget.classList.add('hidden');
-});
 
 $('#loginOpen').addEventListener('click', async () => {
   if (user) {
@@ -272,23 +291,8 @@ $('#loginOpen').addEventListener('click', async () => {
   }
   $('#loginModal').classList.remove('hidden');
 });
-$('#loginForm').addEventListener('submit', async e => {
-  e.preventDefault();
-  $('#loginError').textContent = '';
-  try {
-    await signInWithEmailAndPassword(auth, $('#email').value.trim(), $('#password').value);
-    $('#loginModal').classList.add('hidden');
-    $('#loginForm').reset();
-    await refresh();
-    if (admin) window.location.href = 'admin.html';
-    else if (reseller) toast('Acceso mayorista habilitado');
-    else toast('Tu cuenta todavía no tiene permisos de revendedor.');
-  } catch (err) {
-    $('#loginError').textContent = 'No se pudo iniciar sesión. Verificá correo y contraseña.';
-  }
-});
 
-if (firebaseConfig.apiKey !== 'REEMPLAZAR_API_KEY') {
+if (firebaseConfig.apiKey && firebaseConfig.apiKey !== 'REEMPLAZAR_API_KEY') {
   const app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   onAuthStateChanged(auth, async u => { user = u; await refresh(); });
